@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Voto Online</title>
+
+<script type="text/javascript" src="jquery-3.3.1.min.js"></script>
+
+<script>
+
+	function confirmar(){
+	
+		//Obter o número do candidato do input text
+		var numero = $("#numero").val();
+		
+		$.ajax({
+			type:"GET",
+			url:"/EleicoesService/rest/eleicoes/" + numero,
+			contentType: "application/json",
+			success:function(ret) {
+				$("#nome").html(ret.name);
+				$("#numero").val(ret.idCandidato);
+				$("#votar").prop( "disable", false);
+			}
+		});
+		
+	}function votar(){
+		var voto = $("#numero").val();
+		$.ajax({	
+			type: "POST",	
+			url: "/EleicoesService/rest/eleicoes/",
+			data:	JSON.stringify({idCandidato: $("#numero").val()}),	
+			contentType: "application/json"	,	
+			success: function(ret)	{	
+				alert("OK:	"	+	ret);	
+			}	
+			
+		});
+	}
+		
+		//Acessar o serviço para obter nome e id
+		//Exibir nome
+
+</script>
+
+</head>
+<body>
+
+	<input type="text" id="numero">
+	<button onclick="confirmar();">Confirmar</button>
+	<button id="votar" onclick="votar();">Votar</button>
+	<br>
+	<div id="nome"></div>
+
+</body>
+</html>
